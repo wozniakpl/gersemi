@@ -87,11 +87,13 @@ class App:
         if "cwd" not in kwargs:
             kwargs["cwd"] = self.fallback_cwd
 
-        kwargs["env"] = {**os.environ, **kwargs.get("env", {})}
+        env = {**os.environ, **kwargs.get("env", {})}
+        kwargs["env"] = env
+        binary = env.get("GERSEMI_BINARY", "gersemi")
 
         return outcome(
             subprocess.run(
-                ["gersemi", "--cache-dir", str(self.cache), *map(str, args)],
+                [binary, "--cache-dir", str(self.cache), *map(str, args)],
                 check=False,
                 encoding="utf8",
                 text=True,
